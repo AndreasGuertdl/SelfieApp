@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Selfie App</title>
+  </head>
+  <body>
+    <div>
+      <h1>Data Selfie App</h1>
+      <a href="oi.html">Quero dizer Oi</a>
+      <a href="goodbye.html">Quero dizer Tchau</a>
+    </div>
+    <div>
+      <h2>Sua posição exata:</h2>
+      <p>Latidude: <span id="lat"></span>&deg;</p>
+      <!--&deg; coloca o símbolo de grau.-->
+      <p>Longitude: <span id="lng"></span>&deg;</p>
+    </div>
+  </body>
+  <script>
+    if ("geolocation" in navigator) {
+      console.log("Geo. Avail.");
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        document.getElementById("lat").textContent = lat;
+        document.getElementById("lng").textContent = lng;
+        const data = { lat, lng };
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", //Só sinaliza que estou enviando um JSON
+          },
+          body: JSON.stringify(data),
+        };
+        //Cliente envia algo para este endpoint com um POST
+        //fetch() tbm funciona com POST, porém é necessário esse segundo parâmetro
+        fetch("/api", options);
+      });
+    } else {
+      console.log("Geo. NOT Avail.");
+    }
+
+    /* async function getData() {
+        if ("geolocation" in navigator) {
+          console.log("Geo Avail.");
+          navigator.geolocation.getCurrentPosition(async (position) => {
+            const lat = await position.coords.latitude;
+            const lng = await position.coords.longitude;
+            document.getElementById("lat").textContent = lat;
+            document.getElementById("lng").textContent = lng;
+            return { lat, lng };
+          });
+        } else {
+          console.log("Geo NOT Avail.");
+        }
+      }
+      const data = getData().then(() => {
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", //Só sinaliza que estou enviando um JSON
+          },
+          body: JSON.stringify(data),
+        };
+        //Cliente envia algo para este endpoint com um POST
+        //fetch() tbm funciona com POST, porém é necessário esse segundo parâmetro
+        fetch("/api", options);
+      }); */
+  </script>
+  <style>
+    a {
+      margin-right: 20px;
+    }
+  </style>
+</html>

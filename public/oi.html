@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset = "UTF-8">
-        <title>Selfie App</title>
-        <script src="D:\Room\Arquivos\Cadernos\Front-End\SelfieApp\index.js"></script>
-    </head>
-    <body>
-        <h1>Data Selfie App</h1>
-        <p>Oi</p>
-        <a href="index.html">Voltar</a>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Selfie App</title>
+    <script src="D:\Room\Arquivos\Cadernos\Front-End\SelfieApp\index.js"></script>
+  </head>
+  <body>
+    <h1>Data Selfie App</h1>
+    <p>Oi</p>
+    <br />
+    <p>Pessoas que também disseram Oi:</p>
+    <pre id="listaPessoas"></pre>
+    <br />
+    <a href="index.html">Voltar</a>
+
+    <script>
+      window.onload = function () {
+        var paragraph = document.getElementById("listaPessoas");
+        fetch("/pessoas").then((response) => {
+          response.json().then((data) => {
+            data.forEach((pessoa) => {
+              var textNode = document.createTextNode(
+                `${pessoa.id} | LATITUDE: ${pessoa.latitude} LONGITUDE: ${pessoa.longitude}\n`
+              );
+              paragraph.appendChild(textNode);
+            });
+          });
+        });
+      };
+    </script>
+  </body>
 </html>

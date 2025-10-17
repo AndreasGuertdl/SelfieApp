@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Selfie App</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link type="text/css"rel="stylesheet"  href="styles/mainpage.css">
   </head>
   <body>
     <div>
@@ -12,81 +19,26 @@
     </div>
     <div>
       <h2>Sua posição exata:</h2>
-      <p>Latidude: <span id="lat"></span>&deg;</p>
-      <!--&deg; coloca o símbolo de grau.-->
-      <p>Longitude: <span id="lng"></span>&deg;</p>
-      <button type="submit" , id="send_local" onclick="sendLocation()">
-        Submit
-      </button>
+      <div id="location">
+        <p>Your Latidude: <span id="lat"></span>&deg;</p>
+        <!--&deg; coloca o símbolo de grau.-->
+        <p>Your Longitude: <span id="lng"></span>&deg;</p>
+      </div>
+      <button type="submit" , id="send_local">Send Location</button>
+      <div id="issMap"></div>
     </div>
+    <style>
+      #issMap {
+        height: 500px;
+        width: 50%;
+      }
+    </style>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="components/localization.js"></script>
+    <script src="components/map.js"></script>
   </body>
-  <script>
-    window.onload = () => {
-      db.setItem("1", { name: "Oi", status: "Online" })
-        .then((value) => {
-          console.log(value);
-        })
-        .catch((error) => {
-          console.log("Couldn't retrieve your data.");
-        });
-    };
-
-    function sendLocation() {
-      if ("geolocation" in navigator) {
-        console.log("Geo. Avail.");
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const lat = await position.coords.latitude;
-          const lng = await position.coords.longitude;
-          document.getElementById("lat").textContent = lat;
-          document.getElementById("lng").textContent = lng;
-          const data = { lat, lng };
-          const options = {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", //Só sinaliza que estou enviando um JSON
-            },
-            body: JSON.stringify(data),
-          };
-          //Cliente envia algo para este endpoint com um POST
-          //fetch() tbm funciona com POST, porém é necessário esse segundo parâmetro
-          fetch("/api", options);
-        });
-      } else {
-        console.log("Geo. NOT Avail.");
-      }
-    }
-
-    //Fiz essa alternativa abaixo mas não retorna o conteúdo do body:
-    /*  async function getData() {
-        if ("geolocation" in navigator) {
-          console.log("Geo Avail.");
-          navigator.geolocation.getCurrentPosition(async (position) => {
-            const lat = await position.coords.latitude;
-            const lng = await position.coords.longitude;
-            document.getElementById("lat").textContent = lat;
-            document.getElementById("lng").textContent = lng;
-            return { lat, lng };
-          });
-        } else {
-          console.log("Geo NOT Avail.");
-        }
-      }
-      const data = getData().then(() => {
-        const options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", //Só sinaliza que estou enviando um JSON
-          },
-          body: JSON.stringify(data), //body só pode conter strings
-        };
-        //Cliente envia algo para este endpoint com um POST
-        //fetch() tbm funciona com POST, porém é necessário esse segundo parâmetro
-        fetch("/api", options);
-      }); */
-  </script>
-  <style>
-    a {
-      margin-right: 20px;
-    }
-  </style>
 </html>
